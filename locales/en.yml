@@ -1,0 +1,7 @@
+en:
+  vagrant:
+    errors:
+      plugin_not_found_error: |-
+        Could not find the following plugins for the current environment:
+        %{plugins}
+        Run `vagrant plugin bundle` to install missing plugins.
