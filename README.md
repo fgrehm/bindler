@@ -24,7 +24,9 @@ vagrant vundler setup
 
 ## Usage
 
-Add a `plugins.json` file to your project root like the following:
+Add one of `plugins.json`, `.vagrant_plugins`, or `vagrant/plugins.json`
+to your project root. The first matching file will be used as your
+project's plugins.json file.
 
 ```json
 [
