@@ -24,9 +24,11 @@ module VagrantPlugins
           plugins_json = [
             'vagrant/plugins.json',
             '.vagrant_plugins',
-            ENV['VAGRANT_PLUGINS_FILENAME'],
-            'plugins.json'
-          ].find { |json| @env.cwd.join(json) if @env.cwd.join(json).file? }
+            ENV['VAGRANT_PLUGINS_FILENAME']
+          ].find Proc.new { 'plugins.json' } do |json|
+            plugins = @env.cwd.join(json)
+            plugins if plugins.file?
+          end
 
           if plugins_json.file?
             data = JSON.parse(plugins_json.read)
