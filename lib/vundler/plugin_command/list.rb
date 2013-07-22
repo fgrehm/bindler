@@ -11,11 +11,12 @@ module VagrantPlugins
         def execute
           return unless super == 0
 
-          plugins_json = %w[plugins.json
-            .vagrant_plugins
-            vagrant/plugins.json].map { |plugins_file|
-            @env.cwd.join(plugins_file) if @env.cwd.join(plugins_file).file?
-            }.compact.first
+          plugins_json = [
+            'vagrant/plugins.json',
+            '.vagrant_plugins',
+            ENV['VAGRANT_PLUGINS_FILENAME'],
+            'plugins.json'
+          ].find { |json| @env.cwd.join(json) if @env.cwd.join(json).file? }
 
           if plugins_json.file?
             data = JSON.parse(plugins_json.read)

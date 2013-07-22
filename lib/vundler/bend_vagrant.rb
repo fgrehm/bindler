@@ -26,7 +26,12 @@ Vagrant::Environment.class_eval do
 
   # This method loads plugins from a project specific `plugins.json` file
   def __load_local_plugins
-    plugins_json = cwd.join('plugins.json')
+    plugins_json = [
+      'vagrant/plugins.json',
+      '.vagrant_plugins',
+      ENV['VAGRANT_PLUGINS_FILENAME'],
+      'plugins.json'
+    ].find { |json| @env.cwd.join(json) if @env.cwd.join(json).file? }
 
     unless plugins_json.file?
       vundler_debug 'Local plugins.json file not found'
