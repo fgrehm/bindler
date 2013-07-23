@@ -52,7 +52,7 @@ List installed plugins with `vagrant plugin list`:
 $ vagrant plugin list
 
 vagrant-lxc (0.4.0)
-bindler (0.0.4)
+bindler (0.1.0)
 
 Project dependencies:
   -> vagrant-lxc
