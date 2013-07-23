@@ -51,10 +51,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bindler!
   bundler (~> 1.3)
   rake
   vagrant!
   vagrant-cachier!
   vagrant-lxc!
   vagrant-pristine!
-  bindler!
