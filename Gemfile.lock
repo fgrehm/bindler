@@ -1,26 +1,26 @@
 GIT
   remote: git://github.com/fgrehm/vagrant-cachier.git
-  revision: ae6cb5bcfbdbb2157867d77ded8f2b6f430c0f6c
+  revision: f5d9ce507239535326a0a0395c890cc7a27d73f1
   specs:
-    vagrant-cachier (0.2.0)
+    vagrant-cachier (0.3.0.dev)
 
 GIT
   remote: git://github.com/fgrehm/vagrant-lxc.git
-  revision: 14c1ebfd7c6327307289de86c005a392d0a4d253
+  revision: d2e354839f404ef426bdee38e50c9b3256e1e3c2
   specs:
-    vagrant-lxc (0.4.0.dev)
+    vagrant-lxc (0.4.1.dev)
 
 GIT
   remote: git://github.com/fgrehm/vagrant-pristine.git
-  revision: 45a8d75f048bd611e337583496eb2b48b6998bbd
+  revision: 5c400d7850fc5f98d9601b59f4c3bd74818650de
   specs:
-    vagrant-pristine (0.1.0)
+    vagrant-pristine (0.2.0)
 
 GIT
   remote: git://github.com/mitchellh/vagrant.git
-  revision: abd22dfe72eedc74f1e41a1d0d6095e25bd87c72
+  revision: 4b299c9fc22dfdb192993d4874670370b8e90122
   specs:
-    vagrant (1.2.4.dev)
+    vagrant (1.2.5.dev)
       childprocess (~> 0.3.7)
       erubis (~> 2.7.0)
       i18n (~> 0.6.0)
