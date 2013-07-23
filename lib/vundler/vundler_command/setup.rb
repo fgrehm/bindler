@@ -1,12 +1,12 @@
 require_relative '../logging'
 
 module VagrantPlugins
-  module Vundler
-    module VundlerCommand
+  module Bindler
+    module BindlerCommand
       class Setup < Vagrant.plugin(2, :command)
         def execute
           if @env.home_path.join('global-plugins.json').file?
-            @env.ui.info "Vundler has already been set up!"
+            @env.ui.info "Bindler has already been set up!"
             return 0
           end
 
@@ -18,7 +18,7 @@ module VagrantPlugins
           # Gets a list of other plugins that are installed
           @logger.debug "Getting list of installed plugins"
           other_plugins = plugins_json_data['installed'].dup
-          other_plugins.delete('vundler')
+          other_plugins.delete('bindler')
 
           # Save other plugins to a separate file
           @logger.debug "Writing #{other_plugins.inspect} to #{@env.home_path.join('global-plugins.json')}"
@@ -26,8 +26,8 @@ module VagrantPlugins
             f.write(JSON.dump({'installed' => other_plugins}))
           end
 
-          # Leave only vundler on the global plugins file
-          plugins_json_data['installed'] = ['vundler']
+          # Leave only bindler on the global plugins file
+          plugins_json_data['installed'] = ['bindler']
           @logger.debug "Writing #{plugins_json_data.inspect} to #{plugins_json}"
           plugins_json.open('w+') do |f|
             f.write(JSON.dump plugins_json_data)
@@ -39,7 +39,7 @@ module VagrantPlugins
           # FIXME: We need to handle emacs / vim file types comments
           vagrantfile_contents = <<-STR
 begin
-  require 'vundler'
+  require 'bindler'
 rescue LoadError; end
 #{vagrantfile_contents}
           STR

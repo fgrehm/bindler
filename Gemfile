@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in vundler.gemspec
+# Specify your gem's dependencies in bindler.gemspec
 gemspec
 
 group :development, :test do

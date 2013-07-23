@@ -1,3 +1,3 @@
-module Vundler
+module Bindler
   VERSION = "0.0.4"
 end

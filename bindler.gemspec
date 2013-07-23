@@ -4,8 +4,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'vundler/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "vundler"
-  spec.version       = Vundler::VERSION
+  spec.name          = "bindler"
+  spec.version       = Bindler::VERSION
   spec.authors       = ["Fabio Rehm"]
   spec.email         = ["fgrehm@gmail.com"]
   spec.description   = %q{Dead easy Vagrant plugins management}

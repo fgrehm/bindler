@@ -4,11 +4,11 @@ require Vagrant.source_root.join('plugins/commands/plugin/command/base').to_s
 require "rubygems/dependency_installer"
 
 module VagrantPlugins
-  module Vundler
+  module Bindler
     module PluginCommand
       # Based on https://github.com/mitchellh/vagrant/blob/master/plugins/commands/plugin/action/install_gem.rb
       class Bundle < CommandPlugin::Command::Base
-        include VagrantPlugins::Vundler::Logging
+        include VagrantPlugins::Bindler::Logging
 
         def initialize(*)
           super
@@ -16,19 +16,19 @@ module VagrantPlugins
           if @env.local_data_path
             @local_gems_path = @env.local_data_path.join('gems')
           else
-            vundler_debug 'Local data path is not set'
+            bindler_debug 'Local data path is not set'
           end
         end
 
         def execute
-          if @env.vundler_plugins_file
-            vundler_debug "#{@env.vundler_plugins_file} data: #{@env.vundler_plugins.inspect}"
+          if @env.bindler_plugins_file
+            bindler_debug "#{@env.bindler_plugins_file} data: #{@env.bindler_plugins.inspect}"
 
-            if @env.vundler_plugins.any?
+            if @env.bindler_plugins.any?
               # REFACTOR: Use I18n
               @env.ui.info('Installing plugins...')
 
-              @env.vundler_plugins.each do |plugin|
+              @env.bindler_plugins.each do |plugin|
                 if plugin.is_a?(String)
                   install plugin
                 else
@@ -38,7 +38,7 @@ module VagrantPlugins
               exit_code = 0
             else
               # REFACTOR: Use I18n
-              @env.ui.info("No plugins specified on #{@env.vundler_plugins_file}")
+              @env.ui.info("No plugins specified on #{@env.bindler_plugins_file}")
             end
           else
             # REFACTOR: Use I18n
@@ -69,7 +69,7 @@ module VagrantPlugins
           plugin_name_label += " (#{version})" if version
 
           versions = installed_gems.fetch(plugin_name, {}).keys
-          vundler_debug "Installed versions for #{plugin_name}: #{versions}"
+          bindler_debug "Installed versions for #{plugin_name}: #{versions}"
 
           if (versions.include? version) || (version.nil? && versions.any?)
             @env.ui.info("  -> #{plugin_name_label} already installed")

@@ -31,7 +31,7 @@ GIT
 PATH
   remote: .
   specs:
-    vundler (0.0.4)
+    bindler (0.0.4)
 
 GEM
   remote: https://rubygems.org/
@@ -57,4 +57,4 @@ DEPENDENCIES
   vagrant-cachier!
   vagrant-lxc!
   vagrant-pristine!
-  vundler!
+  bindler!

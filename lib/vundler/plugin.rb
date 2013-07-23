@@ -2,18 +2,18 @@ I18n.load_path << File.expand_path(File.dirname(__FILE__) + '/../../locales/en.y
 I18n.reload!
 
 module VagrantPlugins
-  module Vundler
+  module Bindler
     class Plugin < Vagrant.plugin('2')
-      name 'Vundler'
+      name 'Bindler'
 
       command("plugin") do
         require_relative 'plugin_command/root'
         PluginCommand::Root
       end
 
-      command("vundler") do
-        require_relative 'vundler_command/root'
-        VundlerCommand::Root
+      command("bindler") do
+        require_relative 'bindler_command/root'
+        BindlerCommand::Root
       end
     end
   end

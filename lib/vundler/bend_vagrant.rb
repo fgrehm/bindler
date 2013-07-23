@@ -1,8 +1,8 @@
 # WARNING: Monkey patches ahead
 
 Vagrant::Environment.class_eval do
-  include VagrantPlugins::Vundler::Logging
-  include VagrantPlugins::Vundler::LocalPluginsManifestExt
+  include VagrantPlugins::Bindler::Logging
+  include VagrantPlugins::Bindler::LocalPluginsManifestExt
 
   # UGLY HACK: This is required because we need to load project specific plugins
   # before the `:environment_load` hook from Vagrant::Environment on [1]. In order
@@ -17,7 +17,7 @@ Vagrant::Environment.class_eval do
   alias old_hook hook
   def hook(name)
     unless @__custom_plugins_loaded
-      vundler_debug 'Loading local plugins...'
+      bindler_debug 'Loading local plugins...'
       __load_local_plugins
 
       @__custom_plugins_loaded = true
@@ -27,22 +27,22 @@ Vagrant::Environment.class_eval do
 
   # This method loads plugins from a project specific `plugins.json` file
   def __load_local_plugins
-    unless vundler_plugins_file
-      lookup_paths = VagrantPlugins::Vundler::LocalPluginsManifestExt::PLUGINS_JSON_LOOKUP
-      vundler_debug "Local plugins manifest file not found, looked into #{lookup_paths.inspect}"
+    unless bindler_plugins_file
+      lookup_paths = VagrantPlugins::Bindler::LocalPluginsManifestExt::PLUGINS_JSON_LOOKUP
+      bindler_debug "Local plugins manifest file not found, looked into #{lookup_paths.inspect}"
       return
     end
 
     ARGV.each do |arg|
-      if !arg.start_with?("-") && arg == 'vundler'
-        vundler_debug 'vundler command detected, setting VAGRANT_NO_PLUGINS to 1'
+      if !arg.start_with?("-") && arg == 'bindler'
+        bindler_debug 'bindler command detected, setting VAGRANT_NO_PLUGINS to 1'
         ENV["VAGRANT_NO_PLUGINS"] = "1"
         break
       end
     end
 
     if ENV['VAGRANT_NO_PLUGINS']
-      vundler_debug 'VAGRANT_NO_PLUGINS is set to true, skipping local plugins manifest parsing'
+      bindler_debug 'VAGRANT_NO_PLUGINS is set to true, skipping local plugins manifest parsing'
       return
     end
 
@@ -50,8 +50,8 @@ Vagrant::Environment.class_eval do
     ENV["GEM_PATH"] = "#{local_data_path.join('gems')}#{::File::PATH_SEPARATOR}#{ENV["GEM_PATH"]}"
     ::Gem.clear_paths
 
-    vundler_debug "#{vundler_plugins_file} data: #{vundler_plugins.inspect}"
-    vundler_plugins.each do |plugin|
+    bindler_debug "#{bindler_plugins_file} data: #{bindler_plugins.inspect}"
+    bindler_plugins.each do |plugin|
       if plugin.is_a?(String)
         __load_plugin plugin
       else
@@ -63,12 +63,12 @@ Vagrant::Environment.class_eval do
       plugins = @__failed_to_load.map do |plugin, version|
         "  -> #{plugin} (#{version || ">= 0"})"
       end
-      raise VagrantPlugins::Vundler::PluginNotFoundError, plugins: plugins.join("\n")
+      raise VagrantPlugins::Bindler::PluginNotFoundError, plugins: plugins.join("\n")
     end
   end
 
   def __load_plugin(plugin, version = nil)
-    vundler_debug "Loading #{plugin} (#{version.inspect})"
+    bindler_debug "Loading #{plugin} (#{version.inspect})"
     gem plugin, version
     Vagrant.require_plugin plugin
   rescue Gem::LoadError
@@ -78,12 +78,12 @@ end
 
 require Vagrant.source_root.join('plugins/commands/plugin/state_file').to_s
 # Vagrant plugin commands manipulate a StateFile object that keeps track of system
-# wide installed plugins. Since vundler is kept separately on `~/.vagrant.d/plugins`,
+# wide installed plugins. Since bindler is kept separately on `~/.vagrant.d/plugins`,
 # we hard code a reference to it over here.
-# If we don't do this, Vundler will be uninstalled after a system wide plugin install.
-class VundlerStateFile < VagrantPlugins::CommandPlugin::StateFile
+# If we don't do this, Bindler will be uninstalled after a system wide plugin install.
+class BindlerStateFile < VagrantPlugins::CommandPlugin::StateFile
   def installed_plugins
-    ['vundler'] + @data['installed']
+    ['bindler'] + @data['installed']
   end
 end
 
@@ -94,7 +94,7 @@ VagrantPlugins::CommandPlugin::Command::Base.class_eval do
   alias old_action action
   def action(callable, env=nil)
     env = {
-      plugin_state_file: VundlerStateFile.new(@env.home_path.join("global-plugins.json")),
+      plugin_state_file: BindlerStateFile.new(@env.home_path.join("global-plugins.json")),
     }.merge(env || {})
 
     old_action(callable, env)
@@ -102,18 +102,18 @@ VagrantPlugins::CommandPlugin::Command::Base.class_eval do
 end
 
 require Vagrant.source_root.join('plugins/commands/plugin/action/install_gem').to_s
-# This patch ensures Vundler does not get a reference on `~/.vagrant.d/global-plugins.json`
+# This patch ensures Bindler does not get a reference on `~/.vagrant.d/global-plugins.json`
 VagrantPlugins::CommandPlugin::Action::InstallGem.class_eval do
-  include VagrantPlugins::Vundler::Logging
+  include VagrantPlugins::Bindler::Logging
 
   alias old_call call
   def call(env)
-    if env[:plugin_name] == 'vundler'
-      vundler_debug 'Installing vundler to global plugins file'
-      # vundler is the only plugin that should be installed on the global state file
+    if env[:plugin_name] == 'bindler'
+      bindler_debug 'Installing bindler to global plugins file'
+      # bindler is the only plugin that should be installed on the global state file
       env[:plugin_state_file] = CommandPlugin::StateFile.new(env[:home_path].join("plugins.json"))
     else
-      vundler_debug "Installing #{env[:plugin_name]} to $HOME/.vagrant.d"
+      bindler_debug "Installing #{env[:plugin_name]} to $HOME/.vagrant.d"
     end
     old_call(env)
   end

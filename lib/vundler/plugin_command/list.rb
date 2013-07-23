@@ -1,22 +1,22 @@
 require Vagrant.source_root.join('plugins/commands/plugin/command/list').to_s
 
 module VagrantPlugins
-  module Vundler
+  module Bindler
     module PluginCommand
       # Override the built in `plugin list` command to output project specific
       # plugins information
       class List < CommandPlugin::Command::List
-        include VagrantPlugins::Vundler::Logging
+        include VagrantPlugins::Bindler::Logging
 
         def execute
           return unless super == 0
 
-          if @env.vundler_plugins_file
-            vundler_debug "#{@env.vundler_plugins_file} data: #{@env.vundler_plugins.inspect}"
+          if @env.bindler_plugins_file
+            bindler_debug "#{@env.bindler_plugins_file} data: #{@env.bindler_plugins.inspect}"
 
-            if @env.vundler_plugins.any?
+            if @env.bindler_plugins.any?
               @env.ui.info "\nProject dependencies:"
-              @env.vundler_plugins.each do |plugin|
+              @env.bindler_plugins.each do |plugin|
                 if plugin.is_a?(String)
                   display plugin
                 else

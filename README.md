@@ -1,4 +1,4 @@
-# Vundler
+# Bindler
 Dead easy Vagrant plugins management (not to be confused with [vim's Vundle](https://github.com/gmarik/vundle)),
 think of it as soon-to-be "[Bundler](http://bundler.io/) for Vagrant".
 
@@ -6,7 +6,7 @@ think of it as soon-to-be "[Bundler](http://bundler.io/) for Vagrant".
 This is highly experimental and things might go wrong. It basically does some
 [heavy monkey patching](lib/vundler/bend_vagrant.rb) on Vagrant's core and should
 not be considered "production-ready". Please keep that in mind and be ready to
-[revert Vundler's installation](#help-things-are-falling-apart) in case things
+[revert Bindler's installation](#help-things-are-falling-apart) in case things
 go crazy.
 
 
@@ -14,8 +14,8 @@ go crazy.
 Make sure you have Vagrant 1.2+ and run:
 
 ```
-vagrant plugin install vundler
-vagrant vundler setup
+vagrant plugin install bindler
+vagrant bindler setup
 ```
 
 ## Usage
@@ -46,7 +46,7 @@ List installed plugins with `vagrant plugin list`:
 $ vagrant plugin list
 
 vagrant-lxc (0.4.0)
-vundler (0.0.4)
+bindler (0.0.4)
 
 Project dependencies:
   -> vagrant-lxc
@@ -61,7 +61,7 @@ First bring back Vagrant's default `plugins.json` file:
 mv $HOME/.vagrant.d/{global-,}plugins.json
 ```
 
-And then remove the `require 'vundler'` from your `$HOME/.vagrant.d/Vagrantfile`.
+And then remove the `require 'bindler'` from your `$HOME/.vagrant.d/Vagrantfile`.
 
 ## How does it work?
 Have a look at [this blog post](http://fabiorehm.com/blog/2013/07/15/vundler-dead-easy-plugin-management-for-vagrant/).
@@ -69,13 +69,13 @@ Have a look at [this blog post](http://fabiorehm.com/blog/2013/07/15/vundler-dea
 # Development
 
 ```bash
-git clone vundler
-cd vundler
+git clone bindler
+cd bindler
 bundle install
 
 # Add some changes...
 bundle exec rake build
-vagrant plugin install pkg/vundler-VERSION.gem
+vagrant plugin install pkg/bindler-VERSION.gem
 ```
 
 ## Contributing

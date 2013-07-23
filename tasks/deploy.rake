@@ -4,7 +4,7 @@ end
 
 task :install_vm do
   Bundler.with_clean_env do
-    sh "cd development && vagrant ssh -c 'vagrant plugin uninstall vundler && vagrant plugin install /vagrant/pkg/vundler-*.gem'"
+    sh "cd development && vagrant ssh -c 'vagrant plugin uninstall bindler && vagrant plugin install /vagrant/pkg/bindler-*.gem'"
   end
 end
 

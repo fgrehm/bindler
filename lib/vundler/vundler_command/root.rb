@@ -1,8 +1,8 @@
 require Vagrant.source_root.join('plugins/commands/plugin/command/root').to_s
 
 module VagrantPlugins
-  module Vundler
-    module VundlerCommand
+  module Bindler
+    module BindlerCommand
       class Root < Vagrant.plugin(2, :command)
         def initialize(argv, env)
           super
@@ -12,7 +12,7 @@ module VagrantPlugins
 
           @subcommands.register(:setup) do
             require_relative "setup"
-            Vundler::VundlerCommand::Setup
+            Bindler::BindlerCommand::Setup
           end
         end
 
@@ -35,7 +35,7 @@ module VagrantPlugins
         # Prints the help out for this command
         def help
           opts = OptionParser.new do |o|
-            o.banner = "Usage: vagrant vundler <command> [<args>]"
+            o.banner = "Usage: vagrant bindler <command> [<args>]"
             o.separator ""
             o.separator "Available subcommands:"
 

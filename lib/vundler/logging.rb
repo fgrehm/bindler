@@ -1,8 +1,8 @@
 module VagrantPlugins
-  module Vundler
+  module Bindler
     module Logging
-      def vundler_debug(msg)
-        @logger.debug "[VUNDLER] #{msg}"
+      def bindler_debug(msg)
+        @logger.debug "[BINDLER] #{msg}"
       end
     end
   end
