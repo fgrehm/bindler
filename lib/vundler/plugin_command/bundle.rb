@@ -24,11 +24,11 @@ module VagrantPlugins
           if @env.vundler_plugins_file
             vundler_debug "#{@env.vundler_plugins_file} data: #{@env.vundler_plugins.inspect}"
 
-            if data.any?
+            if @env.vundler_plugins.any?
               # REFACTOR: Use I18n
               @env.ui.info('Installing plugins...')
 
-              data.each do |plugin|
+              @env.vundler_plugins.each do |plugin|
                 if plugin.is_a?(String)
                   install plugin
                 else

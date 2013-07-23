@@ -14,9 +14,9 @@ module VagrantPlugins
           if @env.vundler_plugins_file
             vundler_debug "#{@env.vundler_plugins_file} data: #{@env.vundler_plugins.inspect}"
 
-            if data.any?
+            if @env.vundler_plugins.any?
               @env.ui.info "\nProject dependencies:"
-              data.each do |plugin|
+              @env.vundler_plugins.each do |plugin|
                 if plugin.is_a?(String)
                   display plugin
                 else

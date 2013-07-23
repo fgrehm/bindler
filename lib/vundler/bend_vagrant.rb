@@ -51,7 +51,7 @@ Vagrant::Environment.class_eval do
     ::Gem.clear_paths
 
     vundler_debug "#{vundler_plugins_file} data: #{vundler_plugins.inspect}"
-    data.each do |plugin|
+    vundler_plugins.each do |plugin|
       if plugin.is_a?(String)
         __load_plugin plugin
       else
