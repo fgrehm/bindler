@@ -21,20 +21,11 @@ module VagrantPlugins
         end
 
         def execute
-          plugins_json = [
-            'vagrant/plugins.json',
-            '.vagrant_plugins',
-            ENV['VAGRANT_PLUGINS_FILENAME']
-          ].find Proc.new { 'plugins.json' } do |json|
-            plugins = @env.cwd.join(json)
-            plugins if plugins.file?
-          end
-
-          if plugins_json.file?
-            data = JSON.parse(plugins_json.read)
-            vundler_debug "plugins.json data: #{data.inspect}"
+          if @env.vundler_plugins_file
+            vundler_debug "#{@env.vundler_plugins_file} data: #{@env.vundler_plugins.inspect}"
 
             if data.any?
+              # REFACTOR: Use I18n
               @env.ui.info('Installing plugins...')
 
               data.each do |plugin|
@@ -46,10 +37,12 @@ module VagrantPlugins
               end
               exit_code = 0
             else
-              @env.ui.info('No plugins specified on plugins.json')
+              # REFACTOR: Use I18n
+              @env.ui.info("No plugins specified on #{@env.vundler_plugins_file}")
             end
           else
-            @env.ui.error "No plugins.json found!"
+            # REFACTOR: Use I18n
+            @env.ui.error "No plugins manifest file found, looked up on #{Vagrant::Environment::PLUGINS_JSON_LOOKUP}"
             exit_code = 1
           end
 

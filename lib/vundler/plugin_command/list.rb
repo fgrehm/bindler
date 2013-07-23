@@ -11,18 +11,8 @@ module VagrantPlugins
         def execute
           return unless super == 0
 
-          plugins_json = [
-            'vagrant/plugins.json',
-            '.vagrant_plugins',
-            ENV['VAGRANT_PLUGINS_FILENAME']
-          ].find Proc.new { 'plugins.json' } do |json|
-            plugins = @env.cwd.join(json)
-            plugins if plugins.file?
-          end
-
-          if plugins_json.file?
-            data = JSON.parse(plugins_json.read)
-            vundler_debug "plugins.json data: #{data.inspect}"
+          if @env.vundler_plugins_file
+            vundler_debug "#{@env.vundler_plugins_file} data: #{@env.vundler_plugins.inspect}"
 
             if data.any?
               @env.ui.info "\nProject dependencies:"
@@ -35,7 +25,7 @@ module VagrantPlugins
               end
             end
           else
-            @env.ui.info "\nNo project specific plugins.json file found!"
+            @env.ui.info "\nNo project specific plugins manifest file found!"
           end
 
           # Success, exit status 0

@@ -3,6 +3,24 @@
 Vagrant::Environment.class_eval do
   include VagrantPlugins::Vundler::Logging
 
+  PLUGINS_JSON_LOOKUP = [
+    ENV['VAGRANT_PLUGINS_FILENAME'],
+    'vagrant/plugins.json',
+    '.vagrant_plugins',
+    'plugins.json'
+  ].compact
+
+  def vundler_plugins_file
+    @vundler_plugins_file ||= PLUGINS_JSON_LOOKUP.find do |path|
+      plugins = cwd.join(path)
+      plugins if plugins.file?
+    end
+  end
+
+  def vundler_plugins
+    @vundler_plugins ||= vundler_plugins_file ? JSON.parse(vundler_plugins_file.read) : {}
+  end
+
   # UGLY HACK: This is required because we need to load project specific plugins
   # before the `:environment_load` hook from Vagrant::Environment on [1]. In order
   # to run the hook, Vagrantfile configs have to be parsed [2] to build a
@@ -26,17 +44,8 @@ Vagrant::Environment.class_eval do
 
   # This method loads plugins from a project specific `plugins.json` file
   def __load_local_plugins
-    plugins_json = [
-      'vagrant/plugins.json',
-      '.vagrant_plugins',
-      ENV['VAGRANT_PLUGINS_FILENAME']
-    ].find Proc.new { 'plugins.json' } do |json|
-      plugins = @env.cwd.join(json)
-      plugins if plugins.file?
-    end
-
-    unless plugins_json.file?
-      vundler_debug 'Local plugins.json file not found'
+    unless vundler_plugins_file
+      vundler_debug "Local plugins manifest file not found, looked into #{PLUGINS_JSON_LOOKUP.inspect}"
       return
     end
 
@@ -49,7 +58,7 @@ Vagrant::Environment.class_eval do
     end
 
     if ENV['VAGRANT_NO_PLUGINS']
-      vundler_debug 'VAGRANT_NO_PLUGINS is set to true, skipping local plugins.json parsing'
+      vundler_debug 'VAGRANT_NO_PLUGINS is set to true, skipping local plugins manifest parsing'
       return
     end
 
@@ -57,8 +66,7 @@ Vagrant::Environment.class_eval do
     ENV["GEM_PATH"] = "#{local_data_path.join('gems')}#{::File::PATH_SEPARATOR}#{ENV["GEM_PATH"]}"
     ::Gem.clear_paths
 
-    data = JSON.parse(plugins_json.read)
-    vundler_debug "plugins.json data: #{data.inspect}"
+    vundler_debug "#{vundler_plugins_file} data: #{vundler_plugins.inspect}"
     data.each do |plugin|
       if plugin.is_a?(String)
         __load_plugin plugin
@@ -126,4 +134,3 @@ VagrantPlugins::CommandPlugin::Action::InstallGem.class_eval do
     old_call(env)
   end
 end
-
