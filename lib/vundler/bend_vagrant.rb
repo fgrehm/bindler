@@ -2,24 +2,7 @@
 
 Vagrant::Environment.class_eval do
   include VagrantPlugins::Vundler::Logging
-
-  PLUGINS_JSON_LOOKUP = [
-    ENV['VAGRANT_PLUGINS_FILENAME'],
-    'vagrant/plugins.json',
-    '.vagrant_plugins',
-    'plugins.json'
-  ].compact
-
-  def vundler_plugins_file
-    @vundler_plugins_file ||= PLUGINS_JSON_LOOKUP.find do |path|
-      plugins = cwd.join(path)
-      plugins if plugins.file?
-    end
-  end
-
-  def vundler_plugins
-    @vundler_plugins ||= vundler_plugins_file ? JSON.parse(vundler_plugins_file.read) : {}
-  end
+  include VagrantPlugins::Vundler::LocalPluginsManifestExt
 
   # UGLY HACK: This is required because we need to load project specific plugins
   # before the `:environment_load` hook from Vagrant::Environment on [1]. In order
@@ -45,7 +28,8 @@ Vagrant::Environment.class_eval do
   # This method loads plugins from a project specific `plugins.json` file
   def __load_local_plugins
     unless vundler_plugins_file
-      vundler_debug "Local plugins manifest file not found, looked into #{PLUGINS_JSON_LOOKUP.inspect}"
+      lookup_paths = VagrantPlugins::Vundler::LocalPluginsManifestExt::PLUGINS_JSON_LOOKUP
+      vundler_debug "Local plugins manifest file not found, looked into #{lookup_paths.inspect}"
       return
     end
 
