@@ -1,6 +1,12 @@
+# NOTICE
+**This plugin was initially released as Vundler and was just renamed to
+Bindler to avoid confusion with [Vim's Vundle](https://github.com/gmarik/vundle),
+please follow the steps to [revert its installation](https://github.com/fgrehm/bindler/blob/b12a69e599fc56e7b05108df52a466d022ef592c/README.md#help-things-are-falling-apart)
+before upgrading to Bindler**
+
 # Bindler
-Dead easy Vagrant plugins management (not to be confused with [vim's Vundle](https://github.com/gmarik/vundle)),
-think of it as soon-to-be "[Bundler](http://bundler.io/) for Vagrant".
+Dead easy Vagrant plugins management, think of it as soon-to-be "[Bundler](http://bundler.io/)
+for Vagrant".
 
 ## WARNING
 This is highly experimental and things might go wrong. It basically does some
