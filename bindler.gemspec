@@ -1,7 +1,7 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'vundler/version'
+require 'bindler/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "bindler"
@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["fgrehm@gmail.com"]
   spec.description   = %q{Dead easy Vagrant plugins management}
   spec.summary       = spec.description
-  spec.homepage      = "https://github.com/fgrehm/vundler"
+  spec.homepage      = "https://github.com/fgrehm/bindler"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
