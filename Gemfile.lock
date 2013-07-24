@@ -31,7 +31,7 @@ GIT
 PATH
   remote: .
   specs:
-    bindler (0.1.1)
+    bindler (0.1.2)
 
 GEM
   remote: https://rubygems.org/

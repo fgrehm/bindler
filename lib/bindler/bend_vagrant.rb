@@ -111,7 +111,7 @@ VagrantPlugins::CommandPlugin::Action::InstallGem.class_eval do
     if env[:plugin_name] == 'bindler'
       bindler_debug 'Installing bindler to global plugins file'
       # bindler is the only plugin that should be installed on the global state file
-      env[:plugin_state_file] = CommandPlugin::StateFile.new(env[:home_path].join("plugins.json"))
+      env[:plugin_state_file] = VagrantPlugins::CommandPlugin::StateFile.new(env[:home_path].join("plugins.json"))
     else
       bindler_debug "Installing #{env[:plugin_name]} to $HOME/.vagrant.d"
     end
