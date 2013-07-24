@@ -10,7 +10,7 @@ for Vagrant".
 
 ## WARNING
 This is highly experimental and things might go wrong. It basically does some
-[heavy monkey patching](lib/vundler/bend_vagrant.rb) on Vagrant's core and should
+[heavy monkey patching](lib/bindler/bend_vagrant.rb) on Vagrant's core and should
 not be considered "production-ready". Please keep that in mind and be ready to
 [revert Bindler's installation](#help-things-are-falling-apart) in case things
 go crazy.
@@ -52,7 +52,7 @@ List installed plugins with `vagrant plugin list`:
 $ vagrant plugin list
 
 vagrant-lxc (0.4.0)
-bindler (0.1.0)
+bindler (0.1.1)
 
 Project dependencies:
   -> vagrant-lxc
