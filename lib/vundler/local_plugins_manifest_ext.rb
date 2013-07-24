@@ -4,7 +4,7 @@ module VagrantPlugins
       PLUGINS_JSON_LOOKUP = [
         ENV['VAGRANT_PLUGINS_FILENAME'],
         'vagrant/plugins.json',
-        '.vagrant_plugins',
+        '.vagrant_plugins.json',
         'plugins.json'
       ].compact
 
