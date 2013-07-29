@@ -17,22 +17,61 @@ Vagrant::Environment.class_eval do
   alias old_hook hook
   def hook(name)
     unless @__custom_plugins_loaded
-      bindler_debug 'Loading local plugins...'
-      __load_local_plugins
+      if bindler_plugins_file
+        bindler_debug 'Loading local plugins...'
+        __load_local_plugins
+      else
+        lookup_paths = VagrantPlugins::Bindler::LocalPluginsManifestExt::PLUGINS_JSON_LOOKUP
+        bindler_debug "Local plugins manifest file not found, looked into #{lookup_paths.inspect}"
+      end
+
+      bindler_debug 'Loading plugins installed globally...'
+      __load_global_plugins
 
       @__custom_plugins_loaded = true
     end
     old_hook name
   end
 
-  # This method loads plugins from a project specific `plugins.json` file
-  def __load_local_plugins
-    unless bindler_plugins_file
-      lookup_paths = VagrantPlugins::Bindler::LocalPluginsManifestExt::PLUGINS_JSON_LOOKUP
-      bindler_debug "Local plugins manifest file not found, looked into #{lookup_paths.inspect}"
-      return
+  # This method loads plugins from `~/.vagrant.d/global-plugins.json` file
+  #
+  # It is basically a Copy & Paste from Vagrant::Environment#load_plugins [1]
+  #
+  #   [1] https://github.com/mitchellh/vagrant/blob/master/lib/vagrant/environment.rb#L720-L754
+  #
+  # DISCUSS: What if vagrant had a way of setting the path for the manifest file
+  #          for the whole environment?
+  def __load_global_plugins
+    # If we're in a Bundler environment, don't load plugins. This only
+    # happens in plugin development environments.
+    if defined?(Bundler)
+      require 'bundler/shared_helpers'
+      if Bundler::SharedHelpers.in_bundle?
+        @logger.warn("In a bundler environment, not loading environment plugins!")
+        return
+      end
     end
 
+    # Load the plugins
+    plugins_json_file = @home_path.join("global-plugins.json")
+    bindler_debug("Loading plugins from: #{plugins_json_file}")
+    if plugins_json_file.file?
+      data = JSON.parse(plugins_json_file.read)
+      data["installed"].each do |plugin|
+        bindler_info("Loading plugin from JSON: #{plugin}")
+        begin
+          Vagrant.require_plugin(plugin)
+        rescue Vagrant::Errors::PluginLoadError => e
+          @ui.error(e.message + "\n")
+        rescue Vagrant::Errors::PluginLoadFailed => e
+          @ui.error(e.message + "\n")
+        end
+      end
+    end
+  end
+
+  # This method loads plugins from a project specific `plugins.json` file
+  def __load_local_plugins
     ARGV.each do |arg|
       if !arg.start_with?("-") && arg == 'bindler'
         bindler_debug 'bindler command detected, setting VAGRANT_NO_PLUGINS to 1'
@@ -47,6 +86,7 @@ Vagrant::Environment.class_eval do
     end
 
     # Prepend our local gem path and reset the paths that Rubygems knows about.
+    bindler_debug 'Tweaking GEM_HOME'
     ENV["GEM_PATH"] = "#{local_data_path.join('gems')}#{::File::PATH_SEPARATOR}#{ENV["GEM_PATH"]}"
     ::Gem.clear_paths
 
