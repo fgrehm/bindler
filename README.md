@@ -25,7 +25,7 @@ vagrant bindler setup
 ```
 
 ## Usage
-Add one of `plugins.json`, `.vagrant_plugins`, or `vagrant/plugins.json`
+Add one of `plugins.json`, `.vagrant_plugins.json`, or `vagrant/plugins.json`
 to your project root. The first matching file will be used as your
 project's plugins.json file.
 
