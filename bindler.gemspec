@@ -13,6 +13,11 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/fgrehm/bindler"
   spec.license       = "MIT"
 
+  spec.post_install_message = <<-eos.gsub(/^\s+\|/, '')
+    |Thanks for installing Bindler!",
+    |Run `vagrant bindler setup` to start managing your Vagrant plugins.
+  eos
+
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
