@@ -15,28 +15,48 @@ not be considered "production-ready". Please keep that in mind and be ready to
 [revert Bindler's installation](#help-things-are-falling-apart) in case things
 go crazy.
 
-
 ## Installation
-Make sure you have Vagrant 1.2+ and run:
+After installing Vagrant 1.2+, to get the latest version of Bindler simply run the following:
 
-```
+```bash
 vagrant plugin install bindler
 vagrant bindler setup
 ```
 
+To install a pre-release or legacy version of the plugin look through the
+[Bindler releases page on GitHub](https://github.com/fgrehm/bindler/releases),
+download the `bindler-VERSION.gem`, and run the following:
+
+```bash
+# Set $VERSION to the version you want to install
+VERSION='0.1.4' 
+
+# Assuming you dowloaded the gem to ~/Downloads
+vagrant plugin install ~/Downloads/bindler-$VERSION.gem
+```
+
+# Changelog
+The [Bindler releases page on GitHub](https://github.com/fgrehm/bindler/releases)
+gives you a great overview of all the changes that get into every release of Bindler.
+You can also view [the commit history](https://github.com/fgrehm/bindler/commits/master)
+
 ## Usage
 Add one of `plugins.json`, `.vagrant_plugins.json`, or `vagrant/plugins.json`
-to your project root. The first matching file will be used as your
-project's plugins.json file.
+to your project root. You can even add your own plugin manifest name using the
+`$VAGRANT_PLUGINS_FILENAME` variable. The JSON will be an Array of both plugin
+names (Strings) or Hashes containing the name and version of the plugin:
 
 ```json
 [
   "vagrant-lxc",
-  {"vagrant-cachier": "0.2.0"}
+  {
+    "vagrant-cachier": "0.2.0"
+  }
 ]
 ```
 
-And run `vagrant plugin bundle` to install missing dependencies:
+In a project with a plugins file you can simply run `vagrant plugin bundle` to
+install any missing dependencies:
 
 ```
 $ vagrant plugin bundle
@@ -72,21 +92,26 @@ And then remove the `require 'bindler'` from your `$HOME/.vagrant.d/Vagrantfile`
 ## How does it work?
 Have a look at [this blog post](http://fabiorehm.com/blog/2013/07/15/vundler-dead-easy-plugin-management-for-vagrant/).
 
-# Development
+## Contributing
 
 ```bash
-git clone bindler
-cd bindler
+# Clone the project from origin
+git clone https://github.com/fgrhem/bindler
+
+# Fork the project on GitHub and add it as a remote in your local repository
+git remote add fork https://github.com/USERNAME/bindler
+
+cd bindler/
 bundle install
 
-# Add some changes...
-bundle exec rake build
-vagrant plugin install pkg/bindler-VERSION.gem
-```
+git checkout -b feature/your-awesome-feature # or fix/your-awesome-bug-fix
 
-## Contributing
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+# Add and test out your changes
+rake build
+vagrant plugin install pkg/bindler-VERSION.gem
+
+# Push your changes to the forked branch
+git push fork feature/your-awesome-feature # or fix/your-awesome-bug-fix
+
+# Create a pull request on GitHub
+```
