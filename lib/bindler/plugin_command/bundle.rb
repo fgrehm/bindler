@@ -42,7 +42,7 @@ module VagrantPlugins
             end
           else
             # REFACTOR: Use I18n
-            @env.ui.error "No plugins manifest file found, looked up on #{Vagrant::Environment::PLUGINS_JSON_LOOKUP}"
+            @env.ui.error "No plugins manifest file found, looked up on #{Vagrant::Environment::PLUGINS_LOOKUP}"
             exit_code = 1
           end
 
