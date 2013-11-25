@@ -19,7 +19,7 @@ module VagrantPlugins
       end
 
       def bindler_plugins
-        @bindler_plugins ||= bindler_plugins_file ? YAML.parse(bindler_plugins_file.read) : {}
+        @bindler_plugins ||= bindler_plugins_file ? YAML.parse(bindler_plugins_file.read).to_ruby : {}
       end
     end
   end

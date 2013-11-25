@@ -12,7 +12,7 @@ module VagrantPlugins
 
           # Load current plugins.json file
           plugins_json      = @env.home_path.join('plugins.json')
-          plugins_json_data = YAML.parse(plugins_json.read)
+          plugins_json_data = YAML.parse(plugins_json.read).to_ruby
           @logger.debug "Current #{plugins_json} data: #{plugins_json_data.inspect}"
 
           # Gets a list of other plugins that are installed

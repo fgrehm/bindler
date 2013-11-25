@@ -56,7 +56,7 @@ Vagrant::Environment.class_eval do
     plugins_json_file = @home_path.join("global-plugins.json")
     bindler_debug("Loading plugins from: #{plugins_json_file}")
     if plugins_json_file.file?
-      data = YAML.parse(plugins_json_file.read)
+      data = YAML.parse(plugins_json_file.read).to_ruby
       data["installed"].each do |plugin|
         bindler_info("Loading plugin from global-plugin.json: #{plugin}")
         begin
