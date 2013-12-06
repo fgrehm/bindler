@@ -1,9 +1,3 @@
-# NOTICE
-**This plugin was initially released as Vundler and was just renamed to
-Bindler to avoid confusion with [Vim's Vundle](https://github.com/gmarik/vundle),
-please follow the steps to [revert its installation](https://github.com/fgrehm/bindler/blob/b12a69e599fc56e7b05108df52a466d022ef592c/README.md#help-things-are-falling-apart)
-before upgrading to Bindler**
-
 # Bindler
 Dead easy Vagrant plugins management, think of it as soon-to-be "[Bundler](http://bundler.io/)
 for Vagrant".
@@ -115,3 +109,5 @@ git push fork feature/your-awesome-feature # or fix/your-awesome-bug-fix
 
 # Create a pull request on GitHub
 ```
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/fgrehm/bindler/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
