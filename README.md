@@ -29,7 +29,7 @@ VERSION='0.1.4'
 vagrant plugin install ~/Downloads/bindler-$VERSION.gem
 ```
 
-# Changelog
+## Changelog
 The [Bindler releases page on GitHub](https://github.com/fgrehm/bindler/releases)
 gives you a great overview of all the changes that get into every release of Bindler.
 You can also view [the commit history](https://github.com/fgrehm/bindler/commits/master)
