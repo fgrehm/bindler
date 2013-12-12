@@ -25,9 +25,7 @@ vagrant bindler setup
 ```
 
 ## Usage
-Add one of `plugins.json`, `.vagrant_plugins.json`, or `vagrant/plugins.json`
-to your project root. The first matching file will be used as your
-project's plugins.json file.
+Add a plugin manifest file under one of [these filenames](lib/bindler/local_plugins_manifest_ext.rb#L4-L12). Currently the accepted formats are JSON and YAML. The recommended filenames are `plugins.json` or `plugins.yml`.
 
 ```json
 [
