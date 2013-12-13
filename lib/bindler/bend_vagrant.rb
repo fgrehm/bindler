@@ -21,7 +21,7 @@ Vagrant::Environment.class_eval do
         bindler_debug 'Loading local plugins...'
         __load_local_plugins
       else
-        lookup_paths = VagrantPlugins::Bindler::LocalPluginsManifestExt::PLUGINS_JSON_LOOKUP
+        lookup_paths = VagrantPlugins::Bindler::LocalPluginsManifestExt::PLUGINS_LOOKUP
         bindler_debug "Local plugins manifest file not found, looked into #{lookup_paths.inspect}"
       end
 
@@ -56,9 +56,9 @@ Vagrant::Environment.class_eval do
     plugins_json_file = @home_path.join("global-plugins.json")
     bindler_debug("Loading plugins from: #{plugins_json_file}")
     if plugins_json_file.file?
-      data = JSON.parse(plugins_json_file.read)
+      data = YAML.parse(plugins_json_file.read).to_ruby
       data["installed"].each do |plugin|
-        bindler_info("Loading plugin from JSON: #{plugin}")
+        bindler_info("Loading plugin from global-plugin.json: #{plugin}")
         begin
           Vagrant.require_plugin(plugin)
         rescue Vagrant::Errors::PluginLoadError => e

@@ -35,11 +35,9 @@ gives you a great overview of all the changes that get into every release of Bin
 You can also view [the commit history](https://github.com/fgrehm/bindler/commits/master)
 
 ## Usage
-Add one of `plugins.json`, `.vagrant_plugins.json`, or `vagrant/plugins.json`
-to your project root. You can even add your own plugin manifest name using the
-`$VAGRANT_PLUGINS_FILENAME` variable. The JSON will be an Array of both plugin
-names (Strings) or Hashes containing the name and version of the plugin:
+Add a plugin manifest file under one of [these filenames](lib/bindler/local_plugins_manifest_ext.rb#L4-L12). Currently the accepted formats are JSON and YAML. The recommended filenames are `plugins.json` or `plugins.yml`. You can even add your own plugin manifest name using the `$VAGRANT_PLUGINS_FILENAME` variable. The JSON/YAML format plugins as their names (strings) or their name and version (key-value pair):
 
+Example JSON:
 ```json
 [
   "vagrant-lxc",
@@ -47,6 +45,12 @@ names (Strings) or Hashes containing the name and version of the plugin:
     "vagrant-cachier": "0.2.0"
   }
 ]
+```
+
+Example YAML:
+```yaml
+- vagrant-lxc
+- vagrant-cachier: 0.2.0
 ```
 
 In a project with a plugins file you can simply run `vagrant plugin bundle` to

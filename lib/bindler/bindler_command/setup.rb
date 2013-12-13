@@ -12,7 +12,7 @@ module VagrantPlugins
 
           # Load current plugins.json file
           plugins_json      = @env.home_path.join('plugins.json')
-          plugins_json_data = JSON.parse(plugins_json.read)
+          plugins_json_data = YAML.parse(plugins_json.read).to_ruby
           @logger.debug "Current #{plugins_json} data: #{plugins_json_data.inspect}"
 
           # Gets a list of other plugins that are installed
@@ -23,14 +23,14 @@ module VagrantPlugins
           # Save other plugins to a separate file
           @logger.debug "Writing #{other_plugins.inspect} to #{@env.home_path.join('global-plugins.json')}"
           @env.home_path.join('global-plugins.json').open("w+") do |f|
-            f.write(JSON.dump({'installed' => other_plugins}))
+            f.write(YAML.dump({'installed' => other_plugins}))
           end
 
           # Leave only bindler on the global plugins file
           plugins_json_data['installed'] = ['bindler']
           @logger.debug "Writing #{plugins_json_data.inspect} to #{plugins_json}"
           plugins_json.open('w+') do |f|
-            f.write(JSON.dump plugins_json_data)
+            f.write(YAML.dump plugins_json_data)
           end
 
           # Add require to ~/.vagrant.d/Vagrantfile
