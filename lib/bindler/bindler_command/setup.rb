@@ -5,6 +5,8 @@ module VagrantPlugins
     module BindlerCommand
       class Setup < Vagrant.plugin(2, :command)
         def execute
+          check_vagrant_version
+
           if @env.home_path.join('global-plugins.json').file?
             @env.ui.info "Bindler has already been set up!"
             return 0
@@ -49,6 +51,23 @@ rescue LoadError; end
           end
 
           0
+        end
+
+        private
+        def check_vagrant_version
+          unless tested_vagrant_version?('>= 1.2')
+            raise Bindler::VagrantVersionError, 'bindler requires Vagrant 1.2 or later.'
+          end
+
+          unless tested_vagrant_version?(Bindler::TESTED_VAGRANT_VERSIONS)
+            @env.ui.warn 'This version of Bindler has not been fully tested with the current Vagrant version.'
+            @env.ui.warn 'Try updating the `bindler` vagrant plugin to prevent any issues.'
+            @env.ui.warn 'Should any issues occur with this version, please report them at https://github.com/fgrehm/bindler/issues'
+          end
+        end
+
+        def tested_vagrant_version?(requirements)
+          Gem::Requirement.new(requirements).satisfied_by? Gem::Version.new(Vagrant::VERSION)
         end
       end
     end
