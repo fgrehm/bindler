@@ -1,8 +1,12 @@
 # Bindler
-Dead easy Vagrant plugins management, think of it as soon-to-be "[Bundler](http://bundler.io/)
+
+Dead easy Vagrant plugins management, think of it as "[Bundler](http://bundler.io/)
 for Vagrant".
 
+**NOTICE: This plugin is no longer being maintained, if you are interested on picking up the gem name or wants to continue the work on it please let [@fgrehm](https://github.com/fgrehm) know**.
+
 ## WARNING
+
 This is highly experimental and things might go wrong. It basically does some
 [heavy monkey patching](lib/bindler/bend_vagrant.rb) on Vagrant's core and should
 not be considered "production-ready". Please keep that in mind and be ready to
@@ -10,7 +14,10 @@ not be considered "production-ready". Please keep that in mind and be ready to
 go crazy.
 
 ## Installation
-After installing Vagrant 1.2+, to get the latest version of Bindler simply run the following:
+
+_The plugin works with Vagrant 1.2 and 1.3 only and will error out if you are using a newer version._
+
+To get the latest version of Bindler simply run the following:
 
 ```bash
 vagrant plugin install bindler
